@@ -7,7 +7,9 @@ const graphqlResolver = require('./graphql/resolvers');
 const bodyParser = require('body-parser');
 const auth = require('./middleware/auth');
 const safeCompare = require('safe-compare');
+const path = require('path');
 require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, `./.env.${process.env.NODE_ENV}`) });
 
 app.use(bodyParser({ limit: '20mb' }));
 

@@ -28,10 +28,6 @@ const spotSchema = new Schema(
       type: Number,
       required: true,
     },
-    kickout_level: {
-      type: Number,
-      required: true,
-    },
     approved: {
       type: Boolean,
     },

@@ -7,17 +7,21 @@ module.exports = async function getUserCreatedSpots({ locationInput }, req, res)
     const token = req.request.headers.authorization.split('Bearer ')[1];
 
     let decoded = jwt.verify(token, process.env.SECRET_KEY);
-
-    const userCreatedSpotsList = await Spot.find({ owner: decoded.user_id }).populate([
-      {
-        path: 'images',
-        model: 'Image',
-      },
-      {
-        path: 'location',
-        model: 'Location',
-      },
-    ]);
+    let userCreatedSpotsList;
+    try {
+      userCreatedSpotsList = await Spot.find({ owner: decoded.user_id }).populate([
+        {
+          path: 'images',
+          model: 'Image',
+        },
+        {
+          path: 'location',
+          model: 'Location',
+        },
+      ]);
+    } catch (e) {
+      throw new Error('no user created spots');
+    }
 
     let createdSpots = userCreatedSpotsList.map(i => {
       console.log(distance(i.location.latitude, i.location.longitude, locationInput.latitude, locationInput.longitude));
