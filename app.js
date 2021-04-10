@@ -30,7 +30,13 @@ const createUser = require('./controllers/createUser');
 
 app.use(bodyParser({ limit: '20mb' }));
 
-app.use(cors());
+const corsOptions = {
+  methods: ['POST', 'PUT', 'GET', 'OPTIONS'],
+  origin: '*',
+  allowHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(auth);
 
