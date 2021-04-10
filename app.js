@@ -28,6 +28,8 @@ const getSpotOwner = require('./controllers/getSpotOwner');
 const getUsers = require('./controllers/getUsers');
 const createUser = require('./controllers/createUser');
 
+const updateToAdmin = require('./controllers/updateToAdmin');
+
 app.use(bodyParser({ limit: '20mb' }));
 
 const corsOptions = {
@@ -40,8 +42,8 @@ app.use(cors(corsOptions));
 
 app.use(auth);
 
-app.get('/', (req, res, next) => {
-  res.send('Hello World!');
+app.get('/', async (req, res, next) => {
+  updateToAdmin(req, res, next);
 });
 
 app.post('/login', (req, res, next) => {
