@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const auth = require('./middleware/auth');
 const path = require('path');
+const cors = require('cors');
 require('dotenv').config();
 require('dotenv').config({ path: path.join(__dirname, `./.env.${process.env.NODE_ENV}`) });
 conn_new_app = mongoose.createConnection('mongodb://localhost/new_app');
@@ -28,6 +29,8 @@ const getUsers = require('./controllers/getUsers');
 const createUser = require('./controllers/createUser');
 
 app.use(bodyParser({ limit: '20mb' }));
+
+app.use(cors());
 
 app.use(auth);
 

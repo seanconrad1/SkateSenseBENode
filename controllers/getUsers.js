@@ -1,17 +1,22 @@
 const User = require('../models/user');
+const Spots = require('../models/spot');
+const Bookmarks = require('../models/bookmark');
 
 module.exports = async function getUsers(req, res, next) {
   if (req.isAuth) {
-    const userList = await User.find({}).populate([
-      {
-        path: 'bookmarks',
-        path: 'spots',
+    const userList = await User.find({})
+      .populate({
+        path: 'spot.owner',
+        model: Spots,
         populate: [
-          { path: 'images', model: 'Image' },
+          { path: 'image', model: 'Image' },
           { path: 'location', model: 'Location' },
         ],
-      },
-    ]);
+      })
+      .populate({
+        path: 'bookmark',
+        model: Bookmarks,
+      });
 
     if (userList === null) {
       const errorGetUsers = new Error('Cannot find users');

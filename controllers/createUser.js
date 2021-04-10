@@ -25,6 +25,7 @@ module.exports = async function createUser(req, res, next) {
   }
 
   const existingEmail = await User.findOne({ email: email });
+
   if (existingEmail !== null) {
     const error = new Error(`${email} exists already!`);
     error.status = 500;
@@ -58,11 +59,11 @@ module.exports = async function createUser(req, res, next) {
 
   const token = jwt.sign(
     {
-      userID: createdUser._id.toString(),
       email: createdUser.email,
       name: createdUser.name,
       user_id: createdUser._id.toString(),
       admin: createdUser.admin,
+      push_token: createdUser.push_token,
     },
     process.env.SECRET_KEY,
     { expiresIn: '60d' }
@@ -70,6 +71,5 @@ module.exports = async function createUser(req, res, next) {
 
   res.json({
     token,
-    push_token: createdUser.push_token,
   });
 };
