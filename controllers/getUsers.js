@@ -3,7 +3,7 @@ const Spots = require('../models/spot');
 const Bookmarks = require('../models/bookmark');
 
 module.exports = async function getUsers(req, res, next) {
-  if (req.isAuth) {
+  // if (req.isAuth) {
     const userList = await User.find({})
       .populate({
         path: 'spot.owner',
@@ -28,4 +28,4 @@ module.exports = async function getUsers(req, res, next) {
   } else {
     return new Error('Not authenticated');
   }
-};
+// };
