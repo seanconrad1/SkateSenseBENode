@@ -8,59 +8,60 @@ const uuidv4 = require('uuid');
 
 module.exports = async function createSpot(req, res, next) {
   const { name, location, images, description, kickout_level, owner, spotType, contains } = req.body;
-  if (req.isAuth) {
-    const theOwner = await User.findOne({ _id: owner });
+  console.log(req.body);
+  console.log(req.files);
+  // if (req.isAuth) {
+  //   const theOwner = await User.findOne({ _id: owner });
 
-    try {
-      const createdLocation = new Location({
-        latitude: location.latitude,
-        longitude: location.longitude,
-      });
+  //   try {
+  //     const createdLocation = new Location({
+  //       latitude: location.latitude,
+  //       longitude: location.longitude,
+  //     });
 
-      await createdLocation.save();
+  //     await createdLocation.save();
 
-      const theImages = images.map(async i => {
-        const createdImage = new Image({
-          // public_url: `${uuid}`,
-          base64: i.base64,
-        });
-        await createdImage.save();
-        return createdImage;
-      });
+  //     const theImages = images.map(async i => {
+  //       const createdImage = new Image({
+  //         // public_url: `${uuid}`,
+  //         base64: i.base64,
+  //       });
+  //       await createdImage.save();
+  //       return createdImage;
+  //     });
 
-      const imageObjects = await Promise.all(
-        theImages.map(async image => {
-          return await image;
-        })
-      );
+  //     const imageObjects = await Promise.all(
+  //       theImages.map(async image => {
+  //         return await image;
+  //       })
+  //     );
 
-      const imageIDs = imageObjects.map(i => i._id);
+  //     const imageIDs = imageObjects.map(i => i._id);
 
-      const createdSpot = new Spot({
-        name,
-        owner,
-        kickout_level,
-        description,
-        location: createdLocation._id,
-        images: imageIDs,
-        approved: false,
-        spotType,
-        contains,
-      });
+  //     const createdSpot = new Spot({
+  //       name,
+  //       owner,
+  //       kickout_level,
+  //       description,
+  //       location: createdLocation._id,
+  //       images: imageIDs,
+  //       approved: false,
+  //       spotType,
+  //       contains,
+  //     });
 
-      await createdSpot.save();
+  //     await createdSpot.save();
 
-      await User.updateOne({ _id: owner._id }, { $push: { spots: createdSpot._id } });
+  //     await User.updateOne({ _id: owner._id }, { $push: { spots: createdSpot._id } });
 
-      res.json({
-        ...createdSpot._doc,
-        _id: createdSpot._id.toString(),
-      });
-    } catch (e) {
-      return new Error(e);
-    }
-  } else {
-    return new Error('Not authenticated');
-  }
+  //     res.json({
+  //       ...createdSpot._doc,
+  //       _id: createdSpot._id.toString(),
+  //     });
+  //   } catch (e) {
+  //     return new Error(e);
+  //   }
+  // } else {
+  //   return new Error('Not authenticated');
+  // }
 };
-``;

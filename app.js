@@ -8,10 +8,11 @@ const cors = require('cors');
 require('dotenv').config();
 require('dotenv').config({ path: path.join(__dirname, `./.env.${process.env.NODE_ENV}`) });
 conn_new_app = mongoose.createConnection('mongodb://localhost/new_app');
+const multer = require('multer');
+const upload = multer({ dest: './uploads/' });
 const Image = require('./models/image')(conn_new_app);
 const User = require('./models/user')(conn_new_app);
 const Location = require('./models/location')(conn_new_app);
-
 const login = require('./controllers/login');
 const getSpots = require('./controllers/getSpots');
 const getBookmarks = require('./controllers/getBookmarks');
@@ -79,7 +80,7 @@ app.get('/getNotApprovedList', (req, res, next) => {
   getNotApprovedList(req, res, next);
 });
 
-app.post('/createSpot', (req, res, next) => {
+app.post('/createSpot', upload.array('photos', 4), (req, res, next) => {
   createSpot(req, res, next);
 });
 
