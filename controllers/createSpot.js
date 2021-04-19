@@ -50,8 +50,7 @@ module.exports = async function createSpot(req, res, next) {
 
       await createdSpot.save();
 
-      owner.spots.push(createdSpot);
-      owner.save();
+      await User.updateOne({ _id: owner._id }, { $push: { spots: createdSpot._id } });
 
       res.json({
         ...createdSpot._doc,
@@ -64,3 +63,4 @@ module.exports = async function createSpot(req, res, next) {
     return new Error('Not authenticated');
   }
 };
+``;
